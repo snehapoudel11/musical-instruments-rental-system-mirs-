@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="https://jakarta.ee/xml/ns/jakartaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee
+                             https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd"
+         version="6.0">
+    
+    <!-- ========================================
+         MIRS (Musical Instruments Rental System)
+         Web Application Configuration File
+         
+         This file configures:
+         - Application name and description
+         - Servlet mappings (URL patterns)
+         - JSP configuration
+         - Session timeout
+         - Error pages
+         - Welcome pages
+         ======================================== -->
+    
+    <!-- Application Display Name -->
+    <display-name>MIRS - Musical Instruments Rental System</display-name>
+    
+    <!-- Application Description -->
+    <description>
+        A simple rental system where users can create accounts and rent musical instruments.
+    </description>
+    
+    <!-- ========================================
+         SESSION CONFIGURATION
+         ======================================== -->
+    <session-config>
+        <!-- Cookie configuration for session management -->
+        <cookie-config>
+            <http-only>true</http-only>
+            <secure>false</secure> <!-- Set to true if using HTTPS in production -->
+        </cookie-config>
+        <!-- Tracking mode for sessions -->
+        <tracking-mode>COOKIE</tracking-mode>
+    </session-config>
+    
+    <!-- Public page servlets -->
+    <servlet>
+        <servlet-name>AboutServlet</servlet-name>
+        <servlet-class>com.mirs.controllers.AboutServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AboutServlet</servlet-name>
+        <url-pattern>/about</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>ContactServlet</servlet-name>
+        <servlet-class>com.mirs.controllers.ContactServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ContactServlet</servlet-name>
+        <url-pattern>/contact</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>PublicInstrumentsServlet</servlet-name>
+        <servlet-class>com.mirs.controllers.PublicInstrumentsServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>PublicInstrumentsServlet</servlet-name>
+        <url-pattern>/instruments</url-pattern>
+    </servlet-mapping>
+    
+    <!-- ========================================
+         WELCOME FILES
+         ======================================== -->
+
+    <welcome-file-list>
+        <!-- Default page when accessing root URL -->
+        <welcome-file>index.html</welcome-file>
+        <welcome-file>index.jsp</welcome-file>
+    </welcome-file-list>
+    
+    <!-- ========================================
+         ERROR PAGE CONFIGURATION
+         ======================================== -->
+    
+    <!-- 404 - Page Not Found -->
+    <error-page>
+        <error-code>404</error-code>
+        <location>/WEB-INF/Pages/404.jsp</location>
+    </error-page>
+    
+    <!-- 500 - Internal Server Error -->
+    <error-page>
+        <error-code>500</error-code>
+        <location>/WEB-INF/Pages/500.jsp</location>
+    </error-page>
+    
+    <!-- Exception Types - Unhandled Exceptions -->
+    <error-page>
+        <exception-type>java.lang.Exception</exception-type>
+        <location>/WEB-INF/Pages/500.jsp</location>
+    </error-page>
+    
+</web-app>

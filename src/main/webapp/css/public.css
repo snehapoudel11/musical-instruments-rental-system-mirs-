@@ -1,0 +1,233 @@
+:root {
+    --public-dark: #0d2b24;
+    --public-deep: #09221d;
+    --public-mid: #1D9E75;
+    --public-amber: #E6A44A;
+    --public-paper: #f7fbf8;
+    --public-soft: #eff7f3;
+    --public-ink: #10231f;
+    --public-muted: #58726b;
+    --public-line: rgba(13, 43, 36, 0.12);
+}
+
+body {
+    display: block;
+    color: var(--public-ink);
+    background: var(--public-paper);
+}
+
+.navbar {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: var(--public-dark);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.nav-inner {
+    min-height: 74px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+}
+
+.logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    color: #fff;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+}
+
+.logo-mark {
+    width: 42px;
+    height: 42px;
+    display: inline-grid;
+    place-items: center;
+    border-radius: 8px;
+    background: var(--public-mid);
+    color: #fff;
+}
+
+.logo-mark svg {
+    width: 22px;
+    height: 22px;
+}
+
+.nav-links,
+.nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+.nav-links a {
+    color: rgba(255, 255, 255, 0.78);
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-decoration: none;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+    color: #fff;
+}
+
+.btn-outline {
+    color: #fff;
+    border-color: rgba(255, 255, 255, 0.28);
+    background: transparent;
+}
+
+.main-content {
+    padding: 0;
+}
+
+.container {
+    width: min(1160px, calc(100% - 40px));
+}
+
+.about-hero,
+.public-hero {
+    color: #fff;
+    background: linear-gradient(135deg, var(--public-dark) 0%, var(--public-deep) 54%, #0f4f3f 100%);
+    padding: 92px 0 78px;
+}
+
+.about-hero .eyebrow,
+.public-hero .eyebrow,
+.eyebrow {
+    color: var(--public-amber);
+}
+
+.about-hero .eyebrow::before,
+.public-hero .eyebrow::before,
+.eyebrow::before {
+    background: currentColor;
+}
+
+.about-hero .hero-heading,
+.public-hero .hero-heading,
+.page-header h1 {
+    color: inherit;
+    max-width: 1040px;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    font-size: clamp(2.7rem, 5vw, 5rem);
+    line-height: 0.98;
+    letter-spacing: 0;
+}
+
+.about-hero .hero-copy,
+.public-hero .hero-copy,
+.public-hero .subtitle {
+    color: rgba(255, 255, 255, 0.82);
+    font-size: 1.12rem;
+}
+
+.about-section,
+.public-section {
+    padding: 76px 0;
+}
+
+.about-section-tinted,
+.public-section-tinted {
+    background: var(--public-soft);
+    border-top: 1px solid var(--public-line);
+    border-bottom: 1px solid var(--public-line);
+}
+
+.dashboard-panel,
+.about-feature-card,
+.public-instrument-card {
+    border: 1px solid var(--public-line);
+    border-radius: 8px;
+    background: #fff;
+    box-shadow: 0 18px 50px rgba(13, 43, 36, 0.08);
+    backdrop-filter: none;
+}
+
+.dashboard-panel {
+    padding: 32px;
+}
+
+.panel-title {
+    color: var(--public-dark);
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.panel-subtitle,
+.section-intro,
+.about-feature-card p,
+.contact-detail-item p {
+    color: var(--public-muted);
+}
+
+.btn-primary {
+    background: var(--public-amber);
+    color: var(--public-dark);
+    box-shadow: none;
+}
+
+.btn-secondary {
+    background: var(--public-mid);
+    color: #fff;
+    border-color: transparent;
+}
+
+.btn-ghost {
+    color: var(--public-mid);
+    border-color: rgba(29, 158, 117, 0.26);
+}
+
+.feature-icon {
+    border-radius: 8px;
+    background: rgba(29, 158, 117, 0.12);
+    border: none;
+    box-shadow: none;
+    color: var(--public-mid);
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    border-radius: 8px;
+    background: #fff;
+}
+
+.footer {
+    background: var(--public-dark);
+    color: rgba(255, 255, 255, 0.76);
+    padding: 38px 0;
+}
+
+.footer-content {
+    border-top: none;
+    padding-top: 0;
+}
+
+.footer a {
+    color: #fff;
+    font-weight: 700;
+}
+
+@media (max-width: 768px) {
+    .header-container {
+        padding: 16px 0;
+    }
+
+    .about-hero,
+    .public-hero {
+        padding: 62px 0;
+    }
+
+    .about-hero .hero-heading,
+    .public-hero .hero-heading,
+    .page-header h1 {
+        font-size: 2.7rem;
+    }
+}

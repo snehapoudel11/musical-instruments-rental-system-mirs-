@@ -1,0 +1,52 @@
+# Build output
+build/
+target/
+bin/
+out/
+dist/
+*.class
+*.war
+*.jar
+
+# Database files and exports
+*.sql
+*.sqlite
+*.sqlite3
+*.db
+*.dump
+
+# Runtime/generated files
+logs/
+*.log
+*.tmp
+*.bak
+*.swp
+*.swo
+src/main/webapp/images/
+src/main/webapp/uploads/
+src/main/webapp/WEB-INF/uploads/
+
+# IDE and local workspace files
+.metadata/
+.idea/
+*.iml
+.vscode/
+.settings/
+.classpath
+.project
+.factorypath
+.tern-project
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Environment/local config
+.env
+.env.*
+*.local
+
+# JVM crash/debug files
+hs_err_pid*
+replay_pid*
