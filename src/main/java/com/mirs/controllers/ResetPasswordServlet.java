@@ -18,7 +18,8 @@ public class ResetPasswordServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         HttpSession session = request.getSession(false);
-        if (session == null || session.getAttribute("resetEmail") == null) {
+        if (session == null || session.getAttribute("resetEmail") == null
+                || !Boolean.TRUE.equals(session.getAttribute("passwordResetVerified"))) {
             response.sendRedirect(request.getContextPath() + "/forgotPassword");
             return;
         }
@@ -30,7 +31,8 @@ public class ResetPasswordServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         HttpSession session = request.getSession(false);
-        if (session == null || session.getAttribute("resetEmail") == null) {
+        if (session == null || session.getAttribute("resetEmail") == null
+                || !Boolean.TRUE.equals(session.getAttribute("passwordResetVerified"))) {
             response.sendRedirect(request.getContextPath() + "/forgotPassword");
             return;
         }
@@ -53,6 +55,9 @@ public class ResetPasswordServlet extends HttpServlet {
         try {
             updatePassword(email, newPass.trim());
             session.removeAttribute("resetEmail");
+            session.removeAttribute("passwordResetOtp");
+            session.removeAttribute("passwordResetOtpExpiry");
+            session.removeAttribute("passwordResetVerified");
             response.sendRedirect(request.getContextPath() + "/login?reset=success");
         } catch (Exception e) {
             System.err.println("ResetPasswordServlet: " + e.getMessage());

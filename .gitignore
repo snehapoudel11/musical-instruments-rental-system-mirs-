@@ -7,19 +7,20 @@ dist/
 *.class
 *.war
 *.jar
-
+apache-tomcat-*
 # Database files and exports
 *.sql
 *.sqlite
 *.sqlite3
 *.db
 *.dump
-
+class_diagram.md
 # Runtime/generated files
 logs/
 *.log
 *.tmp
 *.bak
+diagrams
 *.swp
 *.swo
 src/main/webapp/images/

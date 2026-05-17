@@ -58,59 +58,59 @@
         </c:if>
 
         <!-- Add / Edit Form (toggled by JS) -->
-        <div id="instrumentFormPanel" class="dashboard-panel form-panel" style="display:none; margin-bottom:20px;">
+        <div id="instrumentFormPanel" class="dashboard-panel form-panel" style="display:${not empty selectedInstrument ? 'block' : 'none'}; margin-bottom:20px;">
             <div class="panel-header">
                 <div>
-                    <h2 class="panel-title" id="formTitle">Add New Instrument</h2>
+                    <h2 class="panel-title" id="formTitle">${not empty selectedInstrument ? 'Edit Instrument' : 'Add New Instrument'}</h2>
                     <p class="panel-subtitle">Fill in the details below and save.</p>
                 </div>
                 <button type="button" class="btn btn-secondary" onclick="closeForm()">Cancel</button>
             </div>
             <form method="post" action="${pageContext.request.contextPath}/admin/instruments" id="instrumentForm" enctype="multipart/form-data">
-                <input type="hidden" name="action" id="formAction" value="add">
-                <input type="hidden" name="instrumentId" id="formInstrumentId" value="">
+                <input type="hidden" name="action" id="formAction" value="${not empty selectedInstrument ? 'edit' : 'add'}">
+                <input type="hidden" name="instrumentId" id="formInstrumentId" value="${selectedInstrument.instrumentId}">
                 <div class="form-grid">
                     <div class="form-group">
                         <label for="instrumentName">Instrument Name <span class="required">*</span></label>
-                        <input type="text" id="instrumentName" name="instrumentName" required placeholder="e.g. Acoustic Guitar">
+                        <input type="text" id="instrumentName" name="instrumentName" required placeholder="e.g. Acoustic Guitar" value="<c:out value='${selectedInstrument.instrumentName}'/>">
                     </div>
                     <div class="form-group">
                         <label for="categoryId">Category <span class="required">*</span></label>
                         <select id="categoryId" name="categoryId" required>
                             <option value="">Select category...</option>
                             <c:forEach var="cat" items="${categories}">
-                                <option value="${cat.categoryId}">${cat.categoryName}</option>
+                                <option value="${cat.categoryId}" ${selectedInstrument.categoryId == cat.categoryId ? 'selected' : ''}>${cat.categoryName}</option>
                             </c:forEach>
                         </select>
                     </div>
                     <div class="form-group">
                         <label for="brand">Brand</label>
-                        <input type="text" id="brand" name="brand" placeholder="e.g. Yamaha">
+                        <input type="text" id="brand" name="brand" placeholder="e.g. Yamaha" value="<c:out value='${selectedInstrument.brand}'/>">
                     </div>
                     <div class="form-group">
                         <label for="dailyRate">Daily Rate (Rs.) <span class="required">*</span></label>
-                        <input type="number" id="dailyRate" name="dailyRate" step="0.01" min="0" required placeholder="0.00">
+                        <input type="number" id="dailyRate" name="dailyRate" step="0.01" min="0" required placeholder="0.00" value="${selectedInstrument.dailyRate}">
                     </div>
                     <div class="form-group">
                         <label for="quantity">Total Quantity <span class="required">*</span></label>
-                        <input type="number" id="quantity" name="quantity" min="1" value="1" required>
+                        <input type="number" id="quantity" name="quantity" min="1" value="${not empty selectedInstrument ? selectedInstrument.quantity : 1}" required>
                     </div>
                     <div class="form-group">
                         <label for="availableQuantity">Available Quantity</label>
-                        <input type="number" id="availableQuantity" name="availableQuantity" min="0" value="1">
+                        <input type="number" id="availableQuantity" name="availableQuantity" min="0" value="${not empty selectedInstrument ? selectedInstrument.availableQuantity : 1}">
                     </div>
                     <div class="form-group">
                         <label for="status">Status</label>
                         <select id="status" name="status">
-                            <option value="available">Available</option>
-                            <option value="unavailable">Unavailable</option>
-                            <option value="discontinued">Discontinued</option>
+                            <option value="available" ${selectedInstrument.status == 'available' || empty selectedInstrument ? 'selected' : ''}>Available</option>
+                            <option value="unavailable" ${selectedInstrument.status == 'unavailable' ? 'selected' : ''}>Unavailable</option>
+                            <option value="discontinued" ${selectedInstrument.status == 'discontinued' ? 'selected' : ''}>Discontinued</option>
                         </select>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="description">Description</label>
-                    <textarea id="description" name="description" placeholder="Brief description of the instrument..."></textarea>
+                    <textarea id="description" name="description" placeholder="Brief description of the instrument..."><c:out value="${selectedInstrument.description}"/></textarea>
                 </div>
                 <div class="form-group">
                     <label for="image">Instrument Image</label>
@@ -118,7 +118,7 @@
                     <p class="field-note">Leave empty to keep existing image when editing.</p>
                 </div>
                 <div style="display:flex; gap:12px; margin-top:8px;">
-                    <button type="submit" class="btn btn-primary" id="formSubmitBtn">Add Instrument</button>
+                    <button type="submit" class="btn btn-primary" id="formSubmitBtn">${not empty selectedInstrument ? 'Save Changes' : 'Add Instrument'}</button>
                     <button type="button" class="btn btn-secondary" onclick="closeForm()">Cancel</button>
                 </div>
             </form>
@@ -187,7 +187,16 @@
                                         <td><strong>${inst.instrumentName}</strong></td>
                                         <td>${inst.categoryName}</td>
                                         <td>${not empty inst.brand ? inst.brand : 'Not listed'}</td>
-                                        <td>Rs. <fmt:formatNumber value="${inst.dailyRate}" pattern="0.00"/>/day</td>
+                                        <td>
+                                            <c:choose>
+                                                <c:when test="${not empty inst.dailyRate}">
+                                                    Rs. <fmt:formatNumber value="${inst.dailyRate}" pattern="0.00"/>/day
+                                                </c:when>
+                                                <c:otherwise>
+                                                    Rs. --
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </td>
                                         <td>${inst.availableQuantity} / ${inst.quantity}</td>
                                         <td>
                                             <c:choose>
@@ -198,9 +207,7 @@
                                         </td>
                                         <td>
                                             <div class="table-actions">
-                                                <button type="button" class="btn-action btn-action-info"
-                                                    onclick="showEditForm(${inst.instrumentId},'${inst.instrumentName}',${inst.categoryId},'${inst.brand}',${inst.dailyRate},${inst.quantity},${inst.availableQuantity},'${inst.status}','${inst.description}')"
-                                                    title="Edit">Edit</button>
+                                                <a href="${pageContext.request.contextPath}/admin/instruments?editId=${inst.instrumentId}" class="btn-action btn-action-info" title="Edit">Edit</a>
                                                 <form method="post" action="${pageContext.request.contextPath}/admin/instruments"
                                                       style="display:inline;"
                                                       onsubmit="return confirm('Delete ${inst.instrumentName}? This cannot be undone.');">
@@ -238,25 +245,9 @@ function showAddForm() {
     document.getElementById('instrumentFormPanel').style.display = 'block';
     document.getElementById('instrumentFormPanel').scrollIntoView({behavior:'smooth'});
 }
-function showEditForm(id, name, catId, brand, rate, qty, availQty, status, desc) {
-    document.getElementById('formTitle').textContent = 'Edit Instrument';
-    document.getElementById('formAction').value = 'edit';
-    document.getElementById('formInstrumentId').value = id;
-    document.getElementById('formSubmitBtn').textContent = 'Save Changes';
-    document.getElementById('instrumentName').value = name;
-    document.getElementById('categoryId').value = catId;
-    document.getElementById('brand').value = brand === 'null' ? '' : brand;
-    document.getElementById('dailyRate').value = rate;
-    document.getElementById('quantity').value = qty;
-    document.getElementById('availableQuantity').value = availQty;
-    document.getElementById('status').value = status;
-    document.getElementById('description').value = desc === 'null' ? '' : desc;
-    document.getElementById('image').value = '';
-    document.getElementById('instrumentFormPanel').style.display = 'block';
-    document.getElementById('instrumentFormPanel').scrollIntoView({behavior:'smooth'});
-}
 function closeForm() {
     document.getElementById('instrumentFormPanel').style.display = 'none';
+    window.history.replaceState({}, document.title, '${pageContext.request.contextPath}/admin/instruments');
 }
 </script>
 </body>

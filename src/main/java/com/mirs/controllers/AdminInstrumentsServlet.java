@@ -54,13 +54,16 @@ public class AdminInstrumentsServlet extends HttpServlet {
 
         String search = request.getParameter("search");
         if (search == null) search = "";
+        int editId = parseId(request.getParameter("editId"));
 
         List<Map<String, Object>> instruments = fetchInstruments(search);
         List<Map<String, Object>> categories  = fetchCategories();
+        Map<String, Object> selectedInstrument = editId > 0 ? fetchInstrumentById(editId) : null;
 
         request.setAttribute("user", admin);
         request.setAttribute("instruments", instruments);
         request.setAttribute("categories", categories);
+        request.setAttribute("selectedInstrument", selectedInstrument);
         request.setAttribute("search", search);
         request.setAttribute("successMsg", request.getParameter("success"));
         request.setAttribute("errorMsg",   request.getParameter("error"));
@@ -152,7 +155,59 @@ public class AdminInstrumentsServlet extends HttpServlet {
         return list;
     }
 
-    private List<Map<String, Object>> fetchCategories() {
+    // ---------------------------------------------------------------
+	//  DB helpers
+	// ---------------------------------------------------------------
+	
+	private List<Map<String, Object>> fetchInstruments(String search) {
+	    List<Map<String, Object>> list = new ArrayList<>();
+	    Connection conn = null; PreparedStatement stmt = null; ResultSet rs = null;
+	    try {
+	        conn = DBConfig.getConnection();
+	        String sql;
+	        if (search != null && !search.trim().isEmpty()) {
+	            sql = "SELECT i.instrument_id, i.instrument_name, c.category_name, i.brand, "
+	                + "i.quantity, i.available_quantity, i.rental_price_per_day, "
+	                + "i.availability_status, i.`condition`, i.description, i.image_path, i.date_added, i.category_id "
+	                + "FROM instruments i JOIN categories c ON i.category_id = c.category_id "
+	                + "WHERE LOWER(i.instrument_name) LIKE ? OR LOWER(c.category_name) LIKE ? "
+	                + "ORDER BY i.date_added DESC";
+	            stmt = conn.prepareStatement(sql);
+	            String like = "%" + search.toLowerCase() + "%";
+	            stmt.setString(1, like); stmt.setString(2, like);
+	        } else {
+	            sql = "SELECT i.instrument_id, i.instrument_name, c.category_name, i.brand, "
+	                + "i.quantity, i.available_quantity, i.rental_price_per_day, "
+	                + "i.availability_status, i.`condition`, i.description, i.image_path, i.date_added, i.category_id "
+	                + "FROM instruments i JOIN categories c ON i.category_id = c.category_id "
+	                + "ORDER BY i.date_added DESC";
+	            stmt = conn.prepareStatement(sql);
+	        }
+	        rs = stmt.executeQuery();
+	        while (rs.next()) {
+	            Map<String, Object> row = new HashMap<>();
+	            row.put("instrumentId",       rs.getInt("instrument_id"));
+	            row.put("instrumentName",     rs.getString("instrument_name"));
+	            row.put("categoryName",       rs.getString("category_name"));
+	            row.put("categoryId",         rs.getInt("category_id"));
+	            row.put("brand",              rs.getString("brand"));
+	            row.put("quantity",           rs.getInt("quantity"));
+	            row.put("availableQuantity",  rs.getInt("available_quantity"));
+	            row.put("dailyRate",          rs.getBigDecimal("rental_price_per_day"));
+	            row.put("status",             rs.getString("availability_status"));
+	            row.put("condition",          rs.getString("condition"));
+	            row.put("description",        rs.getString("description"));
+	            row.put("imagePath",          rs.getString("image_path"));
+	            row.put("dateAdded",          rs.getTimestamp("date_added"));
+	            list.add(row);
+	        }
+	    } catch (SQLException | ClassNotFoundException e) {
+	        System.err.println("fetchInstruments: " + e.getMessage());
+	    } finally { closeAll(rs, stmt, conn); }
+	    return list;
+	}
+
+	private List<Map<String, Object>> fetchCategories() {
         List<Map<String, Object>> list = new ArrayList<>();
         Connection conn = null; PreparedStatement stmt = null; ResultSet rs = null;
         try {
@@ -169,6 +224,38 @@ public class AdminInstrumentsServlet extends HttpServlet {
             System.err.println("fetchCategories: " + e.getMessage());
         } finally { closeAll(rs, stmt, conn); }
         return list;
+    }
+
+    private Map<String, Object> fetchInstrumentById(int instrumentId) {
+        Connection conn = null; PreparedStatement stmt = null; ResultSet rs = null;
+        try {
+            conn = DBConfig.getConnection();
+            stmt = conn.prepareStatement(
+                "SELECT instrument_id, instrument_name, category_id, brand, quantity, available_quantity, "
+              + "rental_price_per_day, availability_status, description "
+              + "FROM instruments WHERE instrument_id = ?"
+            );
+            stmt.setInt(1, instrumentId);
+            rs = stmt.executeQuery();
+            if (rs.next()) {
+                Map<String, Object> row = new HashMap<>();
+                row.put("instrumentId", rs.getInt("instrument_id"));
+                row.put("instrumentName", rs.getString("instrument_name"));
+                row.put("categoryId", rs.getInt("category_id"));
+                row.put("brand", rs.getString("brand"));
+                row.put("quantity", rs.getInt("quantity"));
+                row.put("availableQuantity", rs.getInt("available_quantity"));
+                row.put("dailyRate", rs.getBigDecimal("rental_price_per_day"));
+                row.put("status", rs.getString("availability_status"));
+                row.put("description", rs.getString("description"));
+                return row;
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            System.err.println("fetchInstrumentById: " + e.getMessage());
+        } finally {
+            closeAll(rs, stmt, conn);
+        }
+        return null;
     }
 
     private void addInstrument(HttpServletRequest req) throws Exception {

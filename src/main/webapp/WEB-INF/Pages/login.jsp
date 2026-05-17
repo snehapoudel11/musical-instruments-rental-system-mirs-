@@ -132,6 +132,10 @@
                     </div>
                 </form>
 
+                <div class="form-footer" style="margin-top:8px;">
+                    <p><a href="${pageContext.request.contextPath}/forgotPassword" class="btn btn-link">Forgot password?</a></p>
+                </div>
+
                 <div class="form-divider"></div>
 
                 <div class="form-footer">

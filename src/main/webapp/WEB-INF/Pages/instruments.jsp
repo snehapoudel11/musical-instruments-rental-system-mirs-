@@ -32,59 +32,6 @@
     <title>MIRS - Browse Instruments</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
     <style>
-        .member-catalog .main-content {
-            padding-top: 22px;
-        }
-
-        .member-catalog .header {
-            padding: 10px 0;
-            background: rgba(246, 248, 247, 0.92);
-            border-bottom: 1px solid rgba(22, 32, 42, 0.08);
-            box-shadow: 0 10px 28px rgba(15, 23, 42, 0.06);
-        }
-
-        .member-catalog .brand-mark {
-            width: 38px;
-            height: 38px;
-            border-radius: 12px;
-            background: #ffffff;
-        }
-
-        .member-catalog .logo {
-            gap: 12px;
-            font-size: 0.92rem;
-        }
-
-        .member-catalog .user-info {
-            gap: 8px;
-            flex-wrap: wrap;
-            justify-content: flex-end;
-        }
-
-        .member-catalog .user-meta {
-            min-width: 120px;
-            padding-right: 8px;
-        }
-
-        .member-catalog .user-info .btn {
-            min-height: 38px;
-            padding: 0 15px;
-            border-radius: 12px;
-            background: rgba(255, 255, 255, 0.76);
-            box-shadow: none;
-        }
-
-        .member-catalog .user-info .btn:hover {
-            background: #ffffff;
-            border-color: rgba(31, 93, 87, 0.22);
-        }
-
-        .member-catalog .user-info .btn-logout {
-            color: #ffffff;
-            background: var(--ink-900);
-            border-color: var(--ink-900);
-        }
-
         .catalog-hero {
             grid-template-columns: 1fr;
             padding: 22px 24px;
@@ -292,15 +239,6 @@
             .instrument-card-footer {
                 flex-direction: column;
                 align-items: stretch;
-            }
-
-            .member-catalog .user-info {
-                justify-content: stretch;
-            }
-
-            .member-catalog .user-info .btn {
-                flex: 1 1 calc(50% - 8px);
-                width: auto;
             }
         }
     </style>
