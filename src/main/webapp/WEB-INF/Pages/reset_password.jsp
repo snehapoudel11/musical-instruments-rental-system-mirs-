@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MIRS â€” Reset Password</title>
+    <title>MIRS - Reset Password</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 </head>
 <body>
@@ -26,8 +26,6 @@
     <div class="error-shell" style="min-height:auto; padding:60px 0;">
         <div class="auth-shell" style="width:min(480px, calc(100% - 48px)); padding:0;">
             <div class="auth-card" style="padding:40px 36px;">
-
-                <!-- Icon -->
                 <div style="text-align:center; margin-bottom:24px;">
                     <div class="brand-mark" style="margin:0 auto; width:56px; height:56px; border-radius:18px; background:linear-gradient(145deg,rgba(31,93,87,0.18),rgba(255,255,255,0.8));">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="width:26px; height:26px; color:var(--brand-700);">
@@ -43,7 +41,6 @@
                     Choose a new strong password for your account.
                 </p>
 
-                <!-- Error -->
                 <c:if test="${not empty errorMsg}">
                     <div class="alert alert-danger" style="margin-bottom:20px;">
                         <div class="alert-copy"><strong>Error</strong><span>${errorMsg}</span></div>
@@ -67,7 +64,6 @@
                         <span id="matchError" class="error-message"></span>
                     </div>
 
-                    <!-- Password strength bar -->
                     <div style="margin-bottom:20px;">
                         <div style="height:4px; background:var(--line-soft); border-radius:4px; overflow:hidden;">
                             <div id="strengthBar" style="height:100%; width:0%; background:var(--danger-700); transition:width 300ms ease, background 300ms ease;"></div>
@@ -81,7 +77,7 @@
                 </form>
 
                 <div class="form-footer" style="margin-top:24px;">
-                    <p><a href="${pageContext.request.contextPath}/login" style="color:var(--brand-700); font-weight:600;">â† Back to Sign In</a></p>
+                    <p><a href="${pageContext.request.contextPath}/login" style="color:var(--brand-700); font-weight:600;">Back to Sign In</a></p>
                 </div>
             </div>
         </div>
